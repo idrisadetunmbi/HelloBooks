@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+    <body>
+
+        <div class="container-fluid text-center" style="margin-top:40px">
+            <img src="./images/hello_books_logo_ii.png" alt="HelloBooks Logo" class="img-circle" style="width:150px; height:150px">
+            <h3>A library for Programming Languages</h3>
+        </div>
+        <div class="container">
+            <div style="margin-top: 70px" id="loginbox" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="panel-title">Sign In</div>
+                        <div class="forgot-password"><a href="#">Forgot password?</a></div>
+                    </div>     
+
+                    <div class="panel-body">
+                        <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+                            
+                        <form id="loginform" method="post" action="" class="form-horizontal" role="form">                                    
+                            <div style="margin-bottom: 25px" class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="login-username" type="text" class="form-control" name="username" placeholder="username or email" required>                                        
+                            </div>
+                                
+                            <div style="margin-bottom: 25px" class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input id="login-password" type="password" class="form-control" name="password" placeholder="password" required>
+                            </div>
+                                
+                            <div style="margin-top:10px" class="form-group">
+                                <div class="col-sm-12 controls">
+                                    <button id="btn-signup" type="submit" class="btn btn-primary">Sign In</button>
+                                    <button id="btn-signup" type="submit" class="btn btn-danger">Google+ Sign In</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12 control">
+                                    <div class="text-no-account">
+                                        Don't have an account! 
+                                    <a href="#" onClick="$('#loginbox').hide(); $('#signupbox').show()">
+                                        Sign Up Here
+                                    </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </form> <!--loginform-->     
+                    </div> <!-- panel-body-->                    
+                </div><!-- panel-info -->  
+            </div><!--#loginbox-->
+
+            <div id="signupbox" style="display:none" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                <div class="panel panel-info" style="margin-top: 70px">
+                    <div class="panel-heading">
+                        <div class="panel-title">Sign Up</div>
+                        <div class="forgot-password"><a id="signinlink" href="#" onclick="$('#signupbox').hide(); $('#loginbox').show()">Sign In</a></div>
+                    </div>
+
+                    <div class="panel-body">
+                        <form id="signupform" class="form-horizontal" method="post" action="">
+                            <div class="form-group">
+                                <label for="email" class="col-md-3 control-label">Email</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" name="email" placeholder="Email Address" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="register-username" class="col-md-3 control-label">Username</label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" name="register-username" placeholder="Username" required>
+                                </div>
+                            </div>
+                        
+                            <div class="form-group">
+                                <label for="register-password" class="col-md-3 control-label">Password</label>
+                                <div class="col-md-9">
+                                    <input type="password" class="form-control" name="register-password" placeholder="Password" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="membership-level" class="col-md-3" title="Membership level determines the amount of book you can borrow and the period within which each borrowed book can last before being returned. Highest Level is the platinum, while Regular is the minimum"><span style="border-bottom: 1px dashed black">Select Membership Level:</span></label>
+                                <div class="col-md-9">
+                                    <select class="form-control" name="membership-level">
+                                        <option>Regular</option>
+                                        <option>Silver</option>
+                                        <option>Gold</option>
+                                        <option>Platinum</option>
+                                    </select>    
+                                </div>
+                                
+                            </div>
+                            
+                            <div class="form-group">                                       
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button id="btn-signup" type="submit" class="btn btn-primary">Sign Up</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div><!--#signupbox-->           
+        </div> <!--container-->
+        
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+         
+    </body>
+</html>

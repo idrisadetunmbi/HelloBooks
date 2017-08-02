@@ -1,0 +1,54 @@
+#loginbox {
+    margin-top: 150px
+}
+
+.forgot-password {
+    float: right;
+    font-size: 80%;
+    position: relative;
+    top: -20px
+}
+
+.panel-body {
+    padding-top: 30px
+}
+
+.text-no-account {
+    border-top: 1px solid #888;
+    padding-top: 15px;
+    font-size: 85%
+}
+
+.books {
+    height: 160px;
+    width: auto;
+    background: black;
+}
+
+.book-section {
+    padding-left: 0px;
+    margin-bottom: 30px;
+}
+
+.custom-nav a {
+    color: #FFF;
+}
+
+.custom-nav a:hover {
+    border-bottom: 2px solid #FFF;
+}
+
+@media screen and (max-width: 420px) {
+    .books {
+        height: 187px;
+        width: 100px;
+    }
+
+    .image-section {
+        width: 35%;
+    }
+
+    .description-section {
+        width: 65%
+    }
+}
