@@ -4,6 +4,7 @@
   "description": "Back end for the hellobooks project",
   "main": "index.js",
   "scripts": {
+    "devstart": "nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -23,6 +24,7 @@
     "eslint-config-airbnb": "^15.1.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.1.0"
+    "eslint-plugin-react": "^7.1.0",
+    "nodemon": "^1.11.0"
   }
 }
