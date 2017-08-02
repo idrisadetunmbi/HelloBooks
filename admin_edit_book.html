@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Edit Book</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+        <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button>
+                <a class="navbar-brand" href="#">HelloBooks</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="custom-nav"><a href="./admin_profile.html">Home</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="./index.html"><span class="glyphicon glyphicon-log-out"></span> Sign Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <div class="row">
+           <div style="margin-top:50px" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+              <h2 style="margin-bottom:30px">Edit Book</h2>    
+              <form id="signupform" class="form-horizontal" role="form" method="post" action="">
+                    <!--what is this??-->
+                    
+                
+                    <div class="form-group">
+                        <label for="book-title" class="col-md-3 control-label">Title</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" name="book-title" placeholder="Title" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="book-description" class="col-md-3 control-label">Description</label>
+                        <div class="col-md-9">
+                            <textarea rows="4" cols="5" class="form-control" type="text" name="book-description" required></textarea>
+                        </div>
+                    </div>
+                
+                    <div class="form-group">
+                        <label for="book-quantity" class="col-md-3 control-label">Quantity</label>
+                        <div class="col-md-9">
+                            <input type="number" class="form-control" name="book-quantity" value="0" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="book-category" class="col-md-3 control-label">Category:</label>
+                        <div class="col-md-9">
+                            <select class="form-control" name="book-category">
+                                <option>-- Select --</option>
+                                <option>Python</option>
+                                <option>React</option>
+                                <option>HTML</option>
+                            </select>    
+                        </div>    
+                    </div>
+                    
+                    <div class="form-group">                                       
+                        <div class="col-md-offset-3 col-md-9">
+                            <button id="btn-signup" type="submit" class="btn btn-primary">Apply</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div> 
+        </div>
+            
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

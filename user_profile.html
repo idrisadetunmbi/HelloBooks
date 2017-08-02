@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>My Profile</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+        <link href="css/style.css" rel="stylesheet">
+
+</head>
+<body>
+
+    <nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>                        
+        </button>
+        <a class="navbar-brand" href="#">HelloBooks</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+            <li class="custom-nav"><a href="./library_books.html">Home</a></li>
+            <li class="custom-nav"><a href="#">Edit Profile</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="./index.html"><span class="glyphicon glyphicon-log-out"></span> Sign Out</a></li>
+        </ul>
+        </div>
+    </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-10">
+                <h4> <b>@Username</b>  (Plan: Platinum)</h4>
+                <h3>Borrowed Books</h3>  
+                <hr/>
+                <div class="col-xs-12 book-section">
+                    <div class="col-xs-2 book-section image-section">
+                        <img src="./images/cat.gif" class="books" alt="Javascript: The Good Parts">
+                    </div>
+                    <div class="col-xs-10 description-section">
+                        <p><b>Title:</b> Javascript: The good parts</p>
+                        <p><b>Date Borrowed:</b> 2017-07-29 </p>
+                        <p><b>Expected Return Date:</b> 2017-07-29 </p>
+                        <button id="btn-signup" type="submit" class="btn btn-primary btn-custom">Return</button> 
+                    </div>    
+                </div>      
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
