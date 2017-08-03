@@ -1,10 +1,11 @@
 {
   "development": {
-    "username": "root",
+    "username": "idris078",
     "password": null,
-    "database": "database_development",
+    "database": "hellobooks-dev",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "port": 5432,
+    "dialect": "postgres"
   },
   "test": {
     "username": "root",
