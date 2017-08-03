@@ -49,6 +49,7 @@
     }
 
     .description-section {
-        width: 65%
+        width: 65%;
+        height: 100%;        
     }
 }
