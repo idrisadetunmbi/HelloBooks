@@ -44,15 +44,13 @@ module.exports = {
   // borrowed but has not returned 
   // GET​ - /api/users/:userId/books?returned=false
   getBorrowedBooks(req, res) {
-    const body = {
-      userId: req.params.userId,
-      message: 'NOT IMPLEMENTED: An API route that allow users to get all the books that the user has borrowed but has not returned'
-    };
-    if (req.query.returned !== null) {
-      body.returned = req.query.returned;
-    }
-
-    res.status(200).send(body);
+    BorrowHistory.findAll({
+      where: {
+        userId: req.params.userId,
+        returnStatus: req.query.returned
+      }
+    }).then(results => res.status(200).send(results))
+      .catch(error => res.status(500).send(error.message));
   },
 
   // An API route that allow a user to borrow a book
@@ -77,8 +75,10 @@ module.exports = {
               error,
               message: 'could not update this borrowing history'
             }));
-        } else {
-          res.status(400).send('you had previously borrowed this book without returning it');
+        } else { // if user previously returned this book without returning it
+          res.status(400).send({
+            message: 'you had previously borrowed this book without returning it'
+          });
         }
       } else {
         BorrowHistory.create({ // create this borrow history
@@ -104,7 +104,10 @@ module.exports = {
     }).then((historyInstance) => {
       historyInstance.update({ returnStatus: true })
         .then((updatedHistoryInstance) => {
-          res.status(201).send(updatedHistoryInstance);
+          res.status(201).send({
+            updatedHistoryInstance,
+            message: 'book has been returned successfully'
+          });
         }).catch(error => res.status(500).send({
           error,
           message: 'could not update this borrowing history'
@@ -115,10 +118,11 @@ module.exports = {
     }));
   },
 
+  // Personal route
   getAllUsers(req, res) {
     return User.findAll().then(users => res.send(users));
   },
-
+  // Personal route
   getUser(req, res) {
     return User.findById(req.params.userId).then(user => res.send(user));
   }
