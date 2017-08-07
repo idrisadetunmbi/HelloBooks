@@ -1,27 +1,18 @@
 const User = require('../models/').User;
+const bcrypt = require('bcrypt');
 
 module.exports = {
   // POST - /users/signup
   createUser(req, res) {
-    // Verify req details
-
-    // Encrypt user password before storing
-    return User.create({
-      username: req.body.username,
-      password: req.body.password,
-      email: req.body.email
-    })
-      .then(user => res.status(200).send(user.username))
-      .catch(error => res.status(400).send(error.message));
-    /* let body = {
-      username: req.body.username,
-      password: req.body.password,
-      free: req.query.free,
-      message: 'create user route not yet implemented'
-    };
-
-    res.status(200).send(body);
-    */
+    bcrypt.hash(req.body.password, 10)
+      .then(hashedPassword => User.create({
+        username: req.body.username,
+        password: hashedPassword,
+        email: req.body.email,
+        membershipLevel: req.body.membershipLevel
+      })
+        .then(user => res.status(200).send(user))
+        .catch(error => res.status(400).send(error.message)));
   },
 
   // POST - /users/signin
@@ -35,7 +26,16 @@ module.exports = {
         username: req.body.username
       }
     })
-      .then(user => res.status(200).send(user))
+      .then((user) => {
+        bcrypt.compare(req.body.password, user.password)
+          .then((result) => {
+            if (result) {
+              res.status(200).send({ message: 'user sign in is successful', user });
+            } else {
+              res.status(400).send('Authentication failed: wrong password');
+            }
+          });
+      })
       .catch(error => res.status(400).send(error.message));
   },
 
