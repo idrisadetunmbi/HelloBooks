@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     category: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
     }
   }, {
     classMethods: {
