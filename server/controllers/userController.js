@@ -1,4 +1,5 @@
 const User = require('../models/').User;
+const BorrowHistory = require('../models/').BorrowHistory;
 const bcrypt = require('bcrypt');
 
 module.exports = {
@@ -28,8 +29,8 @@ module.exports = {
     })
       .then((user) => {
         bcrypt.compare(req.body.password, user.password)
-          .then((result) => {
-            if (result) {
+          .then((passwordIsCorrect) => {
+            if (passwordIsCorrect) {
               res.status(200).send({ message: 'user sign in is successful', user });
             } else {
               res.status(400).send('Authentication failed: wrong password');
@@ -57,19 +58,69 @@ module.exports = {
   // An API route that allow a user to borrow a book
   // POST​ : /api/users/<userId>/books
   borrowBook(req, res) {
-    res.status(200).send({
-      userId: req.params.userId,
-      message: 'NOT IMPLEMENTED: An API route that allow a user to borrow a book'
-    });
+    const userId = req.params.userId;
+    const bookId = req.body.bookId;
+
+    BorrowHistory.findOne({ // find if there is a record of this in the borrowHistory table
+      where: {
+        userId: req.params.userId,
+        bookId: req.body.bookId
+      }
+    }).then((borrowHistoryInstance) => {
+      if (borrowHistoryInstance) { // if this history of borrowed book exists
+        if (borrowHistoryInstance.returnStatus) { // if book was previously borrowed but has been returned
+          // update borrow history instance setting returnStatus to false
+          borrowHistoryInstance.update({ returnStatus: false })
+            .then((updatedHistoryInstance) => {
+              res.status(201).send(updatedHistoryInstance);
+            }).catch(error => res.status(500).send({
+              error,
+              message: 'could not update this borrowing history'
+            }));
+        } else {
+          res.status(400).send('you had previously borrowed this book without returning it');
+        }
+      } else {
+        BorrowHistory.create({ // create this borrow history
+          userId,
+          bookId
+        }).then(historyRecord => res.status(201).send({
+          historyRecord,
+          message: 'you have successfully borrowed this book'
+        }))
+          .catch(error => res.send(error));
+      }
+    }).catch(error => res.send(error.message));
   },
 
   // An API route that allow user to return a book
   // PUT​ : /api/users/<userId>/books
   returnBook(req, res) {
-    res.status(200).send({
-      userId: req.params.userId,
-      message: 'NOT IMPLEMENTED: An API route that allow user to return a book'
-    });
+    BorrowHistory.findOne({
+      where: {
+        userId: req.params.userId,
+        bookId: req.body.bookId
+      }
+    }).then((historyInstance) => {
+      historyInstance.update({ returnStatus: true })
+        .then((updatedHistoryInstance) => {
+          res.status(201).send(updatedHistoryInstance);
+        }).catch(error => res.status(500).send({
+          error,
+          message: 'could not update this borrowing history'
+        }));
+    }).catch(error => res.status(500).send({
+      message: 'could not retrieve book details',
+      error
+    }));
+  },
+
+  getAllUsers(req, res) {
+    return User.findAll().then(users => res.send(users));
+  },
+
+  getUser(req, res) {
+    return User.findById(req.params.userId).then(user => res.send(user));
   }
 
 };

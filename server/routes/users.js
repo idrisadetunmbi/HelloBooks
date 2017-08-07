@@ -19,4 +19,10 @@ router.post('/:userId/books', userController.borrowBook);
 // PUT​ : /api/users/<userId>/books
 router.put('/:userId/books', userController.returnBook);
 
+// Personal route - get all users
+router.get('/', userController.getAllUsers);
+
+router.get('/:userId', userController.getUser);
+
+
 module.exports = router;
