@@ -1,6 +1,8 @@
-const bookController = require('../controllers/bookController');
+import express from 'express';
 
-const router = require('express').Router();
+import bookController from '../controllers/bookController';
+
+const router = express.Router();
 
 // POST - add book - An API route that allow users add new book
 router.post('/', bookController.addBook);
@@ -11,4 +13,4 @@ router.put('/:bookId', bookController.modifyBook);
 // GET - An API route that allow users to gets all the books in the library
 router.get('/', bookController.getAllBooks);
 
-module.exports = router;
+export default { router };
