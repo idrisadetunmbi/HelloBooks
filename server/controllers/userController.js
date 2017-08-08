@@ -15,9 +15,12 @@ export default {
         email: req.body.email,
         membershipLevel: req.body.membershipLevel
       })
-        .then(user => res.status(200).send(user))
-        .catch(error => res.status(400).send(error.message)))
-      .catch(error => res.status(500).send({ error: error.message, message: 'Internal Server Error' }));
+        .then(user => res.status(201).send(user))
+        .catch(error => res.status(503).send(error.message))) // User.create catch
+      .catch(error => res.status(400).send({
+        error: error.message,
+        message: 'No data supplied'
+      })); // bcrypy.hash catch
   },
 
   // POST - /users/signin
@@ -37,12 +40,12 @@ export default {
             if (passwordIsCorrect) {
               res.status(200).send({ message: 'user sign in is successful', user });
             } else {
-              res.status(400).send('Authentication failed: wrong password');
+              res.status(401).send('Authentication failed: wrong password');
             }
           })
-          .catch(error => res.status(500).send(error.message));
+          .catch(error => res.status(400).send(error.message)); // bcrypt catch
       })
-      .catch(error => res.status(400).send(error.message));
+      .catch(error => res.status(401).send(error.message)); // User.findOne catch
   },
 
   // An API route that allow users to get all the books that the user has
