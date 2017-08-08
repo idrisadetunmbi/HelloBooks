@@ -1,6 +1,8 @@
-const Book = require('../models/').Book;
+import models from '../models/';
 
-module.exports = {
+const Book = models.Book;
+
+export default {
   // POST - /api/books
   addBook(req, res) {
     return Book.create({

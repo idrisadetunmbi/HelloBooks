@@ -1,8 +1,11 @@
-const User = require('../models/').User;
-const BorrowHistory = require('../models/').BorrowHistory;
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
+import models from '../models/';
 
-module.exports = {
+const User = models.User;
+const BorrowHistory = models.BorrowHistory;
+
+
+export default {
   // POST - /users/signup
   createUser(req, res) {
     bcrypt.hash(req.body.password, 10)
@@ -13,7 +16,8 @@ module.exports = {
         membershipLevel: req.body.membershipLevel
       })
         .then(user => res.status(200).send(user))
-        .catch(error => res.status(400).send(error.message)));
+        .catch(error => res.status(400).send(error.message)))
+      .catch(error => res.status(500).send({ error: error.message, message: 'Internal Server Error' }));
   },
 
   // POST - /users/signin
@@ -35,7 +39,8 @@ module.exports = {
             } else {
               res.status(400).send('Authentication failed: wrong password');
             }
-          });
+          })
+          .catch(error => res.status(500).send(error.message));
       })
       .catch(error => res.status(400).send(error.message));
   },
@@ -94,7 +99,7 @@ module.exports = {
   },
 
   // An API route that allow user to return a book
-  // PUT​ : /api/users/<userId>/books
+  // GET : /api/users/<userId>/books
   returnBook(req, res) {
     BorrowHistory.findOne({
       where: {
