@@ -1,5 +1,11 @@
-module.exports = (sequelize, DataTypes) => {
+export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
+    identifier: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV1,
+      primaryKey: true,
+      allowNull: false
+    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -18,8 +24,18 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
-    }
+      unique: true,
+      validate: {
+        isEmail: true
+      }
+    },
+    membershipLevel: {
+      field: 'membership_level',
+      type: DataTypes.ENUM,
+      values: ['regular', 'silver', 'gold', 'platinum'],
+      allowNull: false,
+      // defaultValue: 'regular'
+    },
   }, {
     classMethods: {
       associate: (models) => {

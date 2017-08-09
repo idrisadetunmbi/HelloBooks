@@ -1,27 +1,26 @@
-const User = require('../models/').User;
+import bcrypt from 'bcrypt';
+import models from '../models/';
 
-module.exports = {
+const User = models.User;
+const BorrowHistory = models.BorrowHistory;
+
+
+export default {
   // POST - /users/signup
   createUser(req, res) {
-    // Verify req details
-
-    // Encrypt user password before storing
-    return User.create({
-      username: req.body.username,
-      password: req.body.password,
-      email: req.body.email
-    })
-      .then(user => res.status(200).send(user.username))
-      .catch(error => res.status(400).send(error.message));
-    /* let body = {
-      username: req.body.username,
-      password: req.body.password,
-      free: req.query.free,
-      message: 'create user route not yet implemented'
-    };
-
-    res.status(200).send(body);
-    */
+    bcrypt.hash(req.body.password, 10)
+      .then(hashedPassword => User.create({
+        username: req.body.username,
+        password: hashedPassword,
+        email: req.body.email,
+        membershipLevel: req.body.membershipLevel
+      })
+        .then(user => res.status(201).send(user))
+        .catch(error => res.status(503).send(error.message))) // User.create catch
+      .catch(error => res.status(400).send({
+        error: error.message,
+        message: 'No data supplied'
+      })); // bcrypy.hash catch
   },
 
   // POST - /users/signin
@@ -35,41 +34,105 @@ module.exports = {
         username: req.body.username
       }
     })
-      .then(user => res.status(200).send(user))
-      .catch(error => res.status(400).send(error.message));
+      .then((user) => {
+        bcrypt.compare(req.body.password, user.password)
+          .then((passwordIsCorrect) => {
+            if (passwordIsCorrect) {
+              res.status(200).send({ message: 'user sign in is successful', user });
+            } else {
+              res.status(401).send('Authentication failed: wrong password');
+            }
+          })
+          .catch(error => res.status(400).send(error.message)); // bcrypt catch
+      })
+      .catch(error => res.status(401).send(error.message)); // User.findOne catch
   },
 
   // An API route that allow users to get all the books that the user has
   // borrowed but has not returned 
   // GET​ - /api/users/:userId/books?returned=false
   getBorrowedBooks(req, res) {
-    const body = {
-      userId: req.params.userId,
-      message: 'NOT IMPLEMENTED: An API route that allow users to get all the books that the user has borrowed but has not returned'
-    };
-    if (req.query.returned !== null) {
-      body.returned = req.query.returned;
-    }
-
-    res.status(200).send(body);
+    BorrowHistory.findAll({
+      where: {
+        userId: req.params.userId,
+        returnStatus: req.query.returned
+      }
+    }).then(results => res.status(200).send(results))
+      .catch(error => res.status(500).send(error.message));
   },
 
   // An API route that allow a user to borrow a book
   // POST​ : /api/users/<userId>/books
   borrowBook(req, res) {
-    res.status(200).send({
-      userId: req.params.userId,
-      message: 'NOT IMPLEMENTED: An API route that allow a user to borrow a book'
-    });
+    const userId = req.params.userId;
+    const bookId = req.body.bookId;
+
+    BorrowHistory.findOne({ // find if there is a record of this in the borrowHistory table
+      where: {
+        userId: req.params.userId,
+        bookId: req.body.bookId
+      }
+    }).then((borrowHistoryInstance) => {
+      if (borrowHistoryInstance) { // if this history of borrowed book exists
+        if (borrowHistoryInstance.returnStatus) { // if book was previously borrowed but has been returned
+          // update borrow history instance setting returnStatus to false
+          borrowHistoryInstance.update({ returnStatus: false })
+            .then((updatedHistoryInstance) => {
+              res.status(201).send(updatedHistoryInstance);
+            }).catch(error => res.status(500).send({
+              error,
+              message: 'could not update this borrowing history'
+            }));
+        } else { // if user previously returned this book without returning it
+          res.status(400).send({
+            message: 'you had previously borrowed this book without returning it'
+          });
+        }
+      } else {
+        BorrowHistory.create({ // create this borrow history
+          userId,
+          bookId
+        }).then(historyRecord => res.status(201).send({
+          historyRecord,
+          message: 'you have successfully borrowed this book'
+        }))
+          .catch(error => res.send(error));
+      }
+    }).catch(error => res.send(error.message));
   },
 
   // An API route that allow user to return a book
-  // PUT​ : /api/users/<userId>/books
+  // GET : /api/users/<userId>/books
   returnBook(req, res) {
-    res.status(200).send({
-      userId: req.params.userId,
-      message: 'NOT IMPLEMENTED: An API route that allow user to return a book'
-    });
+    BorrowHistory.findOne({
+      where: {
+        userId: req.params.userId,
+        bookId: req.body.bookId
+      }
+    }).then((historyInstance) => {
+      historyInstance.update({ returnStatus: true })
+        .then((updatedHistoryInstance) => {
+          res.status(201).send({
+            updatedHistoryInstance,
+            message: 'book has been returned successfully'
+          });
+        }).catch(error => res.status(500).send({
+          error,
+          message: 'could not update this borrowing history'
+        }));
+    }).catch(error => res.status(500).send({
+      message: 'could not retrieve book details',
+      error
+    }));
+  },
+
+  // Personal route
+  getAllUsers(req, res) {
+    return User.findAll().then(users => res.send(users));
+  },
+  // Personal route
+  getUser(req, res) {
+    return User.findById(req.params.userId).then(user => res.send(user));
   }
 
 };

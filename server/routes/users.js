@@ -1,6 +1,7 @@
-const router = require('express').Router();
+import express from 'express';
+import userController from '../controllers/userController';
 
-const userController = require('../controllers/userController');
+const router = express.Router();
 
 router.post('/signup', userController.createUser);
 
@@ -19,4 +20,10 @@ router.post('/:userId/books', userController.borrowBook);
 // PUT​ : /api/users/<userId>/books
 router.put('/:userId/books', userController.returnBook);
 
-module.exports = router;
+// Personal route - get all users
+router.get('/', userController.getAllUsers);
+
+router.get('/:userId', userController.getUser);
+
+
+export default { router };
