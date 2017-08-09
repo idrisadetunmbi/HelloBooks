@@ -67,8 +67,6 @@ export default {
       .catch(error => res.status(401).send(error.message)); // User.findOne catch
   },
 
-  
-
   // An API route that allow users to get all the books that the user has
   // borrowed but has not returned 
   // GET​ - /api/users/:userId/books?returned=false
