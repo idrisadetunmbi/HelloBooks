@@ -3,8 +3,7 @@ export default (sequelize, DataTypes) => {
     identifier: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV1,
-      primaryKey: true,
-      allowNull: false
+      primaryKey: true
     },
     username: {
       type: DataTypes.STRING,
@@ -32,9 +31,7 @@ export default (sequelize, DataTypes) => {
     membershipLevel: {
       field: 'membership_level',
       type: DataTypes.ENUM,
-      values: ['regular', 'silver', 'gold', 'platinum'],
-      allowNull: false,
-      // defaultValue: 'regular'
+      values: ['regular', 'silver', 'gold', 'platinum']
     },
   }, {
     classMethods: {
