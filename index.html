@@ -42,7 +42,7 @@
                                 
                             <div style="margin-top:10px" class="form-group">
                                 <div class="col-sm-12 controls">
-                                    <button id="btn-signup" type="submit" onclick="decideUser()" class="btn btn-primary">Sign In</button>
+                                    <button id="btn-signup" type="submit" onclick="decideUser()" class="btn btn-primary"><a id="btn-signup-link" href="./user_profile.html">Sign In</button>
                                     <button id="btn-signup" type="submit" class="btn btn-danger">Google+ Sign In</button>
                                 </div>
                             </div>
@@ -127,8 +127,8 @@
             function decideUser() {
                 var userEmail = document.getElementById("login-username").value;
                 if (userEmail == "idrisadetunmbi@gmail.com") {
-                    document.getElementById("loginform")
-                        .setAttribute("action", "./admin_profile.html");
+                    document.getElementById("btn-signup-link")
+                        .setAttribute("href", "./admin_profile.html");
                 }
             }
         </script>
