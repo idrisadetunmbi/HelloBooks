@@ -3,7 +3,7 @@ module.exports = {
     queryInterface.createTable('Users', {
       identifier: {
         type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.UUIDV1,
         primaryKey: true
       },
       username: {
@@ -32,7 +32,6 @@ module.exports = {
         field: 'membership_level',
         type: Sequelize.ENUM,
         values: ['regular', 'silver', 'gold', 'platinum']
-        // defaultValue: 'regular'
       },
       createdAt: {
         allowNull: false,
