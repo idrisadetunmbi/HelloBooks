@@ -11,6 +11,6 @@ Back end is a RESTful api server which can be accessed through https://hellobook
 
 All routes to the back end server will return with an "invalid token..." response except the following:
 
-  path: ['/api/users/signup', '/api/users/signin', '/api/', '/api/books/', '/api/users/']
+  path: ['/', '/api/users/signup', '/api/users/signin', '/api/', '/api/books/', '/api/users/']
 
 Other routes expect a jsonwebtoken to work and routes that have not been implemented will return with a 404.
