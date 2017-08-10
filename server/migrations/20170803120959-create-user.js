@@ -4,8 +4,7 @@ module.exports = {
       identifier: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
-        primaryKey: true,
-        allowNull: false
+        primaryKey: true
       },
       username: {
         type: Sequelize.STRING,
@@ -32,8 +31,7 @@ module.exports = {
       membershipLevel: {
         field: 'membership_level',
         type: Sequelize.ENUM,
-        values: ['regular', 'silver', 'gold', 'platinum'],
-        allowNull: false,
+        values: ['regular', 'silver', 'gold', 'platinum']
         // defaultValue: 'regular'
       },
       createdAt: {
