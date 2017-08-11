@@ -17,17 +17,7 @@ beforeEach((done) => {
 });
 
 describe('User sign up and sign in routes', () => {
-  describe('GET /', () => {
-    it('should return 404', (done) => {
-      chai.request(server)
-        .get('/')
-        .end((err, res) => {
-          assert.equal(res.statusCode, 404);
-          done();
-        });
-    });
-  });
-
+  
   describe('POST /api/users/signup', () => {
     it('should return status code 400 when no data is supplied', (done) => {
       chai.request(server)
@@ -71,18 +61,6 @@ describe('User sign up and sign in routes', () => {
         .end((err, res) => {
           assert.equal(res.statusCode, 400);
           assert.equal(res.body.message, 'Invalid credentials supplied');
-          done();
-        });
-    });
-
-    it('should return return 400 when invalid or no password is supplied', (done) => {
-      chai.request(server)
-        .post('/api/users/signup')
-        .type('form')
-        .send(userSeeders.signUp.nullPassword)
-        .end((err, res) => {
-          assert.equal(res.statusCode, 400);
-          assert.equal(res.body.message, 'No password supplied');
           done();
         });
     });

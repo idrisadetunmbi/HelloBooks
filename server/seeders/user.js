@@ -29,7 +29,7 @@ export default {
       membershipLevel: 'regular',
     },
 
-    // res.body.message === ""Invalid credentials supplied""
+    // res.body.message === "Invalid credentials supplied"
     // res.statusCode === 400
     nullEmail: {
       username: 'user004',
