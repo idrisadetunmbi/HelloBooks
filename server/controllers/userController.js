@@ -23,15 +23,18 @@ export default {
       })
         .then((user) => {
           user.password = undefined;
-          res.status(201).json({
+          res.status(201).send({
             user,
             message: 'user successfully created'
           });
         })
-        .catch(error => res.status(400).send(error.message))) // User.create catch
+        .catch(error => res.status(400).send({
+          error,
+          message: 'Invalid credentials supplied'
+        }))) // User.create catch
       .catch(error => res.status(400).send({
         error: error.message,
-        message: 'No data supplied'
+        message: 'No password supplied'
       })); // bcrypy.hash catch
   },
 
@@ -54,7 +57,7 @@ export default {
                 identifier: user.identifier,
                 isAdmin: user.admin
               }, app.get('authenticationSecret'));
-              res.status(200).json({ message: 'user sign in is successful', token });
+              res.status(200).send({ message: 'user sign in is successful', token });
             } else {
               res.status(401).send('Authentication failed: wrong password');
             }
@@ -143,11 +146,15 @@ export default {
                   BorrowHistory.create({ // create this borrow history
                     userId,
                     bookId
-                  }).then(historyRecord => res.status(201).send({
-                    historyRecord,
-                    message: 'you have successfully borrowed this book'
-                  }))
-                    .catch(error => res.send(error));
+                  }).then((historyRecord) => {
+                    bookResult.update({ // reduce available book quantity by one
+                      quantity: bookResult.quantity - 1
+                    });
+                    res.status(201).send({
+                      historyRecord,
+                      message: 'you have successfully borrowed this book'
+                    });
+                  }).catch(error => res.send(error));
                 }
               }).catch(error => res.send(error.message));
             }
@@ -168,20 +175,31 @@ export default {
         bookId
       }
     }).then((historyInstance) => {
-      historyInstance.update({ returnStatus: true })
-        .then((updatedHistoryInstance) => {
-          res.status(201).send({
-            updatedHistoryInstance,
-            message: 'book has been returned successfully'
+      if (historyInstance.returnStatus) {
+        res.send({
+          message: 'you had previously returned this book'
+        });
+      } else {
+        historyInstance.update({ returnStatus: true })
+          .then((updatedHistoryInstance) => {
+            Book.findById(bookId).then((bookInstance) => {
+              bookInstance.update({ quantity: bookInstance.quantity + 1 });
+            });
+            res.status(201).send({
+              updatedHistoryInstance,
+              message: 'book has been returned successfully'
+            });
+          }).catch((error) => {
+            res.status(500).send({
+              message: error.message
+            });
           });
-        }).catch(error => res.status(500).send({
-          error,
-          message: 'could not update this borrowing history'
-        }));
-    }).catch(error => res.status(500).send({
-      message: 'could not retrieve book details',
-      error
-    }));
+      }
+    }).catch((error) => {
+      res.status(500).send({
+        message: error.message
+      });
+    });
   },
 
   // Personal route

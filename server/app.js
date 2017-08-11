@@ -14,14 +14,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.set('authenticationSecret', '1234');
 app.use(expressJWT({ secret: app.get('authenticationSecret') }).unless({
-  path: ['/api/users/signup', '/api/users/signin', '/api/', '/api/books/', '/api/users/']
+  path: ['/api/users/signup', '/api/users/signin', '/api', '/api/books', '/api/users']
 }));
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
-    res.status(401).send('invalid token...');
+    res.status(401).send('invalid token');
   }
 });
+
+/*
+  app.get('/', (req, res) => {
+  res.status(200).send('Welcome');
+});*/
 
 app.use('/api', api);
 
