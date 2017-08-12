@@ -1,7 +1,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) =>
     queryInterface.createTable('Users', {
-      identifier: {
+      id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV1,
         primaryKey: true
@@ -19,19 +19,16 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
-
       email: {
         type: Sequelize.STRING,
-        allowNull: false,
         unique: true,
         validate: {
           isEmail: true
         }
       },
       membershipLevel: {
-        field: 'membership_level',
-        type: Sequelize.ENUM,
-        values: ['regular', 'silver', 'gold', 'platinum']
+        type: Sequelize.ENUM('regular', 'silver', 'gold', 'platinum'),
+        allowNull: false
       },
       createdAt: {
         allowNull: false,

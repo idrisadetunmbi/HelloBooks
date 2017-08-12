@@ -29,12 +29,12 @@ export default {
           });
         })
         .catch(error => res.status(400).send({
-          error,
-          message: 'Invalid credentials supplied'
+          message: 'username or email already exists',
+          error: error.errors[0].message
         }))) // User.create catch
       .catch(error => res.status(400).send({
         error: error.message,
-        message: 'No password supplied'
+        message: 'No password supplied' // already caught by express validator
       })); // bcrypy.hash catch
   },
 

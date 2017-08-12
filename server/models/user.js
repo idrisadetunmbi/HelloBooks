@@ -1,6 +1,6 @@
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    identifier: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV1,
       primaryKey: true
@@ -14,24 +14,20 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-
     admin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
-
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
       unique: true,
       validate: {
         isEmail: true
       }
     },
     membershipLevel: {
-      field: 'membership_level',
-      type: DataTypes.ENUM,
-      values: ['regular', 'silver', 'gold', 'platinum']
+      type: DataTypes.ENUM('regular', 'silver', 'gold', 'platinum'),
+      allowNull: false
     },
   }, {
     classMethods: {
