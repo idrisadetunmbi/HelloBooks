@@ -1,9 +1,10 @@
 import express from 'express';
 import userController from '../controllers/userController';
+import reqBodyValidators from '../controllers/requestValidators';
 
 const router = express.Router();
 
-router.post('/signup', userController.createUser);
+router.post('/signup', reqBodyValidators.signUpRequest, userController.createUser);
 
 router.post('/signin', userController.signInUser);
 
