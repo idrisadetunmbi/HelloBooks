@@ -1,26 +1,5 @@
 export default {
   signUp: {
-    // res.message.body === "user successfully created"
-    // res.statusCode === 201 
-    fullAdminDetails: {
-      username: 'user001',
-      password: 'javascript',
-      admin: true,
-      email: 'user001@mail.com',
-      membershipLevel: 'regular',
-      // identifier: Sequelize.UUIDV4()
-    },
-
-    // res.body.message === "user successfully created"
-    // res.statusCode === 201
-    fullUserDetails: {
-      username: 'user002',
-      password: 'javascript',
-      email: 'user002@mail.com',
-      membershipLevel: 'regular',
-      // identifier: Sequelize.UUIDV4()
-    },
-
     // res.body.message === "Invalid credentials supplied"
     // res.statusCode === 400
     nullUsername: {
@@ -45,14 +24,31 @@ export default {
       email: 'user005@mail.com'
     },
 
+    // res.body.message === "user successfully created"
+    // res.statusCode === 201
+    fullUserDetails: {
+      username: 'user002',
+      password: 'javascript',
+      email: 'user002@mail.com',
+      membershipLevel: 'regular'
+    },
+
     // Object.message === "Invalid credentials supplied"
     // res.statusCode === 400
-    nonUniqueValues: {
+    nonUniqueEmail: {
       username: 'user001',
       password: 'javascript',
-      admin: true,
-      email: 'user001@mail.com',
+      email: 'user002@mail.com',
       membershipLevel: 'regular',
+    },
+
+    // Object.message === "Invalid credentials supplied"
+    // res.statusCode === 400
+    nonUniqueUsername: {
+      username: 'user002',
+      password: 'javascript',
+      email: 'user005@mail.com',
+      membershipLevel: 'regular'
     },
   },
 
