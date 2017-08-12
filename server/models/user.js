@@ -26,14 +26,12 @@ export default (sequelize, DataTypes) => {
       }
     },
     membershipLevel: {
-      type: DataTypes.ENUM,
-      values: ['regular', 'silver', 'gold', 'platinum'],
+      type: DataTypes.ENUM('regular', 'silver', 'gold', 'platinum'),
       allowNull: false
     },
   }, {
     classMethods: {
       associate: (models) => {
-
       }
     }
   });
