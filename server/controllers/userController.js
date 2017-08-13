@@ -1,14 +1,18 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+
 import models from '../models/';
 
 import app from '../app';
-
 
 const User = models.User;
 const Book = models.Book;
 const BorrowHistory = models.BorrowHistory;
 
+dotenv.config({
+  path: `${__dirname}/../../.env`
+})
 
 export default {
   // POST - /users/signup
@@ -40,34 +44,34 @@ export default {
 
   // POST - /users/signin
   signInUser(req, res) {
-    /*
-      let username = req.body.username,
-      password = req.body.password;
-    */
     return User.findOne({
       where: {
         username: req.body.username
       }
     })
       .then((user) => {
-        bcrypt.compare(req.body.password, user.password)
-          .then((passwordIsCorrect) => {
-            if (passwordIsCorrect) {
-              const token = jwt.sign({
-                identifier: user.identifier,
-                isAdmin: user.admin
-              }, app.get('authenticationSecret'));
-              res.status(200).send({ message: 'user sign in is successful', token });
-            } else {
-              res.status(401).send('Authentication failed: wrong password');
-            }
-          })
-          .catch(error => res.status(400).send({
-            error: error.message,
-            message: 'No credentials supplied'
-          })); // bcrypt catch
+        if (user) {
+          const passwordIsCorrect = bcrypt.compareSync(req.body.password, user.password);
+          if (passwordIsCorrect) {
+            const token = jwt.sign(user.id, process.env.AUTHENTICATION_SECRET);
+            res.status(200).send({
+              message: 'user signin is successful',
+              token,
+            });
+          } else {
+            res.status(401).send({
+              message: 'please verify the password is correct'
+            });
+          }
+        } else {
+          res.status(401).send({
+            message: 'please verify the username or that you are registered'
+          });
+        }
       })
-      .catch(error => res.status(401).send(error.message)); // User.findOne catch
+      .catch(error => res.status(401).send({
+        message: 'please verify your details are correct'
+      })); // User.findOne catch
   },
 
   // An API route that allow users to get all the books that the user has

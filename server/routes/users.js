@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/signup', reqBodyValidators.signUpRequest, userController.createUser);
 
-router.post('/signin', userController.signInUser);
+router.post('/signin', reqBodyValidators.signInRequest, userController.signInUser);
 
 // An API route that allow users to get all the books that the user has
 // borrowed but has not returned
