@@ -3,8 +3,13 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import expressJWT from 'express-jwt';
 import expressValidator from 'express-validator';
+import dotenv from 'dotenv';
 
 import api from './routes/api';
+
+dotenv.config({
+  path: `${__dirname}/../.env`
+});
 
 const app = express();
 
@@ -27,8 +32,7 @@ app.use(expressValidator({
   }
 }));
 
-app.set('authenticationSecret', '1234');
-app.use(expressJWT({ secret: app.get('authenticationSecret') }).unless({
+app.use(expressJWT({ secret: process.env.AUTHENTICATION_SECRET }).unless({
   path: ['/', '/api/users/signup', '/api/users/signin', '/api', '/api/books', '/api/users']
 }));
 
@@ -37,11 +41,6 @@ app.use((err, req, res, next) => {
     res.status(401).send({ error: 'invalid token' });
   }
 });
-
-/*
-  app.get('/', (req, res) => {
-  res.status(200).send('Welcome');
-});*/
 
 app.use('/api', api);
 
