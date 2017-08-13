@@ -52,30 +52,41 @@ export default {
     },
   },
 
-  /*
   signIn: {
-    // Object.message === "user sign in is successful"
-    correctValues: {
-      username: 'user001',
+    // statuscode === 400
+    // message === invalid credentials supplied 
+    nullValues: {
+    },
+    
+    // status code === 400
+    // message === invalid credentials supplied
+    nullUsername: {
       password: 'javascript'
     },
 
-    // Plain text === Authentication failed: wrong password
-    wrongPassword: {
+    nullPassword: {
       username: 'user001',
-      password: 'none'
     },
 
-    // Plain html === Cannot read property 'password' of null
-    nullValues: {
-
+    // status code === 200
+    // message === user signin is successful
+    fullSigninDetails: {
+      username: 'user002',
+      password: 'javascript'
     },
 
-    // Plain html === Cannot read property 'password' of null
+    // status code === 401
+    // message === please verify the username or that you are registered
     wrongUsername: {
       username: 'user003',
       password: 'javascript'
+    },
+
+    // status code === 401
+    // message === please verify the password is correct
+    wrongPassword: {
+      username: 'user002',
+      password: 'javascript21'
     }
   }
-  */
 };
