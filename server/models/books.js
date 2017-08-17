@@ -7,7 +7,7 @@ export default (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: false
     },
     author: {
       type: DataTypes.STRING,
@@ -19,7 +19,7 @@ export default (sequelize, DataTypes) => {
     },
     quantity: {
       type: DataTypes.INTEGER,
-      defaultValue: 0
+      allowNull: false
     }
   }, {
     classMethods: {
