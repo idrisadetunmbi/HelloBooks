@@ -176,7 +176,7 @@ describe('book routes', () => {
         });
     });
 
-    it('should return 400 with non-int bookId', (done) => {
+    it('should return 400 with non-int bookId param', (done) => {
       chai.request(server)
         .put('/api/books/string')
         .type('form')
@@ -204,82 +204,15 @@ describe('book routes', () => {
       chai.request(server)
         .put('/api/books/1')
         .set('authorization', `Bearer ${adminToken}`)
+        .type('form')
+        .send({
+          quantity: 5
+        })
         .end((err, res) => {
           assert.equal(res.statusCode, 200);
           assert.exists(res.body.data);
           done();
         });
     });
-
-    
-
-    // it('should return 404 with no bookId', (done) => {
-    //   chai.request(server).put('/api/books/')
-    // })
-
-  //   it('should return 400 when no title is supplied', (done) => {
-  //     chai.request(server)
-  //       .put('/api/books/:bookId')
-  //       .set('authorization', `Bearer ${adminToken}`)
-  //       .type('form')
-  //       .send(bookSeeders.createBook.nullTitle)
-  //       .end((err, res) => {
-  //         assert.equal(res.statusCode, 400);
-  //         assert.equal(res.body.message, 'invalid parameters supplied');
-  //         done();
-  //       });
-  //   });
-
-  //   it('should return 400 when no quantity is supplied', (done) => {
-  //     chai.request(server)
-  //       .put('/api/books/:bookId')
-  //       .set('authorization', `Bearer ${adminToken}`)
-  //       .type('form')
-  //       .send(bookSeeders.createBook.nullTitle)
-  //       .end((err, res) => {
-  //         assert.equal(res.statusCode, 400);
-  //         assert.equal(res.body.message, 'invalid parameters supplied');
-  //         done();
-  //       });
-  //   });
-
-  //   it('should return 400 with negative quantity', (done) => {
-  //     chai.request(server)
-  //       .put('/api/books/:bookId')
-  //       .set('authorization', `Bearer ${adminToken}`)
-  //       .type('form')
-  //       .send(bookSeeders.createBook.negativeQuantity)
-  //       .end((err, res) => {
-  //         assert.equal(res.statusCode, 400);
-  //         assert.equal(res.body.message, 'invalid parameters supplied');
-  //         done();
-  //       });
-  //   });
-
-  //   it('should return 201 with full book details', (done) => {
-  //     chai.request(server)
-  //       .put('/api/books/:bookId')
-  //       .set('authorization', `Bearer ${adminToken}`)
-  //       .type('form')
-  //       .send(bookSeeders.createBook.fullBookDetails)
-  //       .end((err, res) => {
-  //         assert.equal(res.statusCode, 201);
-  //         assert.equal(res.body.message, 'book added successfully');
-  //         done();
-  //       });
-  //   });
-
-  //   it('should return 400 with existing book title', (done) => {
-  //     chai.request(server)
-  //       .put('/api/books/:bookId')
-  //       .set('authorization', `Bearer ${adminToken}`)
-  //       .type('form')
-  //       .send(bookSeeders.createBook.fullBookDetails)
-  //       .end((err, res) => {
-  //         assert.equal(res.statusCode, 400);
-  //         assert.equal(res.body.message, 'another book with this title exists');
-  //         done();
-  //       });
-  //   });
   });
 });
