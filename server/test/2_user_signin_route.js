@@ -61,7 +61,7 @@ describe('User sign in route', () => {
         .send(userSeeders.signIn.wrongUsername)
         .end((err, res) => {
           assert.equal(res.statusCode, 401);
-          assert.equal(res.body.message, 'please verify the username or that you are registered');
+          assert.equal(res.body.message, 'username does not exist');
           done();
         });
     });

@@ -21,24 +21,26 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(expressValidator({
   customValidators: {
-    isAlphaNum: (value) => {
-      return /^[0-9a-zA-Z]+$/.test(value);
-    },
+    isAlphaNum: value => /^[0-9a-zA-Z]+$/.test(value),
 
     // verifies if value from req is in the specified memebership level
-    inMembershipLevels: (value) => {
-      return ['regular', 'silver', 'gold', 'platinum'].includes(value);
-    }
+    inMembershipLevels: value => ['regular', 'silver', 'gold', 'platinum'].includes(value),
+
+    isPositive: value => value > 0
   }
 }));
 
 app.use(expressJWT({ secret: process.env.AUTHENTICATION_SECRET }).unless({
-  path: ['/', '/api/users/signup', '/api/users/signin', '/api', '/api/books', '/api/users']
+  path: ['/', '/api/users/signup', '/api/users/signin', '/api', '/api/users']
 }));
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
-    res.status(401).send({ error: 'invalid token' });
+    res.status(401).send({
+      error: 'you are not signed in or invalid token'
+    });
+  } else {
+    next();
   }
 });
 
