@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/idrisadetunmbi/HelloBooks.svg?branch=master)](https://travis-ci.org/idrisadetunmbi/HelloBooks)
-
-<a href='https://coveralls.io/github/idrisadetunmbi/HelloBooks?branch=server-development'><img src='https://coveralls.io/repos/github/idrisadetunmbi/HelloBooks/badge.svg?branch=server-development' alt='Coverage Status' /></a>
+[![Build Status](https://travis-ci.org/idrisadetunmbi/HelloBooks.svg?branch=server-development)](https://travis-ci.org/idrisadetunmbi/HelloBooks) <a href='https://coveralls.io/github/idrisadetunmbi/HelloBooks?branch=server-development'><img src='https://coveralls.io/repos/github/idrisadetunmbi/HelloBooks/badge.svg?branch=server-development' alt='Coverage Status' /></a>
 
 # HelloBooks
 Andela HelloBooks Bootcamp project
