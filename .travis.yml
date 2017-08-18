@@ -7,4 +7,4 @@ cache:
 services:
   - postgresql
 before_script:
-  - psql -c 'create database hellobooks-test;' -U postgres
+  - psql -c 'create database hellobookstest;' -U postgres
