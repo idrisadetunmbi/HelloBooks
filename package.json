@@ -2,7 +2,7 @@
   "name": "hellobooks-server",
   "version": "1.0.0",
   "description": "Back end for the hellobooks project",
-  "main": "index.js",
+  "main": "./server/bin/bin.js",
   "scripts": {
     "devstart": "nodemon ./server/bin/bin.js --exec babel-node",
     "clean": "rm -rf ./production",
@@ -10,6 +10,9 @@
     "start": "npm run build && NODE_ENV=production node ./production/bin/bin.js",
     "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha ./server/test --compilers js:babel-register",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "engines": {
+    "node": "8.1.4" 
   },
   "keywords": [
     "Andela",
