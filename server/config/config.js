@@ -10,12 +10,7 @@ module.exports = {
     dialect: 'postgres'
   },
   production: {
-    username: 'rzjphxev',
-    password: 'q92INLKzxtqf2Olln-joaLyjWt9LnmVq',
-    database: 'rzjphxev',
-    host: 'babar.elephantsql.com',
-    protocol: 'postgres',
-    port: 5432,
+    use_env_variable: 'DATABASE_URL',
     dialect: 'postgres'
   },
   test: {
