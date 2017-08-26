@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/idrisadetunmbi/HelloBooks.svg?branch=server-development)](https://travis-ci.org/idrisadetunmbi/HelloBooks) [![Coverage Status](https://coveralls.io/repos/github/idrisadetunmbi/HelloBooks/badge.svg?branch=server-development)](https://coveralls.io/github/idrisadetunmbi/HelloBooks?branch=server-development) <a href='https://coveralls.io/github/idrisadetunmbi/HelloBooks?branch=server-development'><img src='https://coveralls.io/repos/github/idrisadetunmbi/HelloBooks/badge.svg?branch=server-development' alt='Coverage Status' /></a>
+[![Build Status](https://travis-ci.org/idrisadetunmbi/HelloBooks.svg?branch=server-development)](https://travis-ci.org/idrisadetunmbi/HelloBooks) [![Coverage Status](https://coveralls.io/repos/github/idrisadetunmbi/HelloBooks/badge.svg?branch=server-development)](https://coveralls.io/github/idrisadetunmbi/HelloBooks?branch=server-development)
 
 
 # HelloBooks
