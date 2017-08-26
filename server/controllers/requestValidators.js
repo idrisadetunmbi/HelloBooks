@@ -46,7 +46,7 @@ export default {
   createBookRequest: (req, res, next) => {
     req.checkBody('title', 'title cannot be less than 5 characters').notEmpty().len(5, 50);
     req.checkBody('author', 'author cannot be empty').notEmpty();
-    req.checkBody('quantity', 'quantity cannot only be a positive integer').notEmpty().isInt().isPositive();
+    req.checkBody('quantity', 'quantity can only be a positive integer').notEmpty().isInt().isPositive();
     req.checkBody('description', 'description cannot be less than 5 characters').notEmpty().len(5, 1000);
     req.checkBody('category', 'category cannot be less than 3 characters').notEmpty().len(5, 20);
     
@@ -83,7 +83,7 @@ export default {
       req.checkBody('author', 'author cannot be empty').notEmpty();
     }
     if (reqBodyParams.includes('quantity')) {
-      req.checkBody('quantity', 'quantity cannot only be a positive integer').notEmpty().isInt().isPositive();
+      req.checkBody('quantity', 'quantity can only be a positive integer').notEmpty().isInt().isPositive();
     }
     if (reqBodyParams.includes('description')) {
       req.checkBody('description', 'description cannot be less than 5 characters').notEmpty().len(5, 1000);
@@ -132,18 +132,19 @@ export default {
 
   userBookActions: (req, res, next) => {
     if (req.user !== req.params.userId) {
-      res.status(400).send({
-        message: 'signed in user is not equal to requesting user'
+      res.status(403).send({
+        message: 'signed in user is not equal to requesting user',
+        description: 'you cannot perform this function for another user'
       });
     } else {
-      User.findById(req.params.userId)
+      User.findById(req.user)
         .then((user) => {
           if (!user) {
             res.status(400).send({
               message: 'user does not exist'
             });
           } else if (user.admin) {
-            res.status(400).send({
+            res.status(403).send({
               message: 'admin user cannot perform this function'
             });
           } else {
@@ -185,8 +186,9 @@ export default {
             }
           })
           .catch((error) => {
-            res.status(500).send({
-              error: error.message
+            res.status(400).send({
+              message: 'invalid user Id',
+              description: error.message
             });
           });
       } else if (user.id !== req.params.userId) {
