@@ -9,7 +9,7 @@ export default {
       .then((book) => {
         res.status(201).send({
           message: 'book added successfully',
-          book
+          data: book
         });
       })
       .catch((error) => {
