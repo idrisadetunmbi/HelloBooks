@@ -25,8 +25,8 @@ export default {
         .then((user) => {
           user.password = undefined;
           res.status(201).send({
-            user,
-            message: 'user successfully created'
+            message: 'user successfully created',
+            data: user
           });
         })
         .catch(error => res.status(400).send({
@@ -53,7 +53,7 @@ export default {
             const token = jwt.sign(user.id, process.env.AUTHENTICATION_SECRET);
             res.status(200).send({
               message: 'user signin is successful',
-              token,
+              data: { token, userId: user.id }
             });
           } else {
             res.status(401).send({
@@ -76,22 +76,30 @@ export default {
   // borrowed but has not returned 
   // GET​ - /api/users/:userId/books?returned=false
   getBorrowedBooks(req, res) {
-    const returned = req.query.returned;
+    const returned = req.query.returned === 'false';
     if (returned) {
       BorrowHistory.findAll({
         where: {
           userId: req.params.userId,
-          returnStatus: req.query.returned
+          returnStatus: false
         }
-      }).then(results => res.status(200).send(results))
-        .catch(error => res.status(500).send(error.message));
+      }).then((results) => {
+        res.status(200).send({
+          message: 'list of user unreturned books',
+          data: results
+        });
+      })
+        .catch(error => res.status(500).send({ error: error.message }));
     } else {
       BorrowHistory.findAll({
         where: {
           userId: req.params.userId,
         }
-      }).then(results => res.status(200).send(results))
-        .catch(error => res.status(500).send(error.message));
+      }).then(results => res.status(200).send({
+        message: 'list of user borrowd books',
+        data: results
+      }))
+        .catch(error => res.status(500).send({ error: error.message }));
     }
   },
 
@@ -111,12 +119,11 @@ export default {
           where: {
             userId,
             bookId
-            // returnStatus: false
           }
         }).then((borrowHistoryInstance) => {
           if (borrowHistoryInstance) {
             if (!borrowHistoryInstance.returnStatus) { // if user had previously borrowed this book without returning it
-              res.status(400).send({
+              res.status(403).send({
                 message: 'you had previously borrowed this book without returning it'
               });
             } else {
@@ -220,7 +227,7 @@ export default {
                   .then(() => {
                     res.status(201).send({
                       message: 'book has been returned successfully',
-                      updatedHistoryInstance
+                      data: updatedHistoryInstance
                     });
                   }).catch(error => res.status(500).send({
                     error: error.message
