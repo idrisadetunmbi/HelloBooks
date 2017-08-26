@@ -33,7 +33,7 @@ describe('book routes', () => {
           password: 'javascript'
         })
         .end((err, res) => {
-          adminToken = res.body.token;
+          adminToken = res.body.data.token;
           chai.request(server)
             .post('/api/users/signin')
             .type('form')
@@ -42,7 +42,7 @@ describe('book routes', () => {
               password: userSeeders.signIn.fullSigninDetails.password
             })
             .end((err, res) => {
-              userToken = res.body.token;
+              userToken = res.body.data.token;
               done();
             });
         });

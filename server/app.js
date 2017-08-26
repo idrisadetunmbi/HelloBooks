@@ -26,7 +26,7 @@ app.use(expressValidator({
     // verifies if value from req is in the specified memebership level
     inMembershipLevels: value => ['regular', 'silver', 'gold', 'platinum'].includes(value),
 
-    isPositive: value => value > 0
+    isPositive: value => value >= 0
   }
 }));
 
