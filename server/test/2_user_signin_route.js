@@ -49,7 +49,7 @@ describe('User sign in route', () => {
         .send(userSeeders.signIn.fullSigninDetails)
         .end((err, res) => {
           assert.equal(res.statusCode, 200);
-          assert.exists(res.body.token);
+          assert.exists(res.body.data.token);
           done();
         });
     });
