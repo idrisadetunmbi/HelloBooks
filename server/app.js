@@ -31,7 +31,7 @@ app.use(expressValidator({
 }));
 
 app.use(expressJWT({ secret: process.env.AUTHENTICATION_SECRET }).unless({
-  path: ['/', '/api/users/signup', '/api/users/signin', '/api', '/api/users']
+  path: ['/', '/api/users/signup', '/api/users/signin', '/api/', '/api/users']
 }));
 
 app.use((err, req, res, next) => {
