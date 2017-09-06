@@ -13,7 +13,6 @@ dotenv.config({
 });
 
 export default {
-  // POST - /users/signup
   createUser(req, res) {
     bcrypt.hash(req.body.password, 10)
       .then(hashedPassword => User.create({
@@ -39,7 +38,6 @@ export default {
       })); // bcrypy.hash catch
   },
 
-  // POST - /users/signin
   signInUser(req, res) {
     return User.findOne({
       where: {
@@ -50,7 +48,7 @@ export default {
         if (user) {
           const passwordIsCorrect = bcrypt.compareSync(req.body.password, user.password);
           if (passwordIsCorrect) {
-            const token = jwt.sign(user.id, process.env.AUTHENTICATION_SECRET);
+            const token = jwt.sign({ userId: user.id, isAdmin: user.admin }, process.env.AUTHENTICATION_SECRET);
             res.status(200).send({
               message: 'user signin is successful',
               data: { token, userId: user.id }
@@ -76,8 +74,7 @@ export default {
   // borrowed but has not returned 
   // GET​ - /api/users/:userId/books?returned=false
   getBorrowedBooks(req, res) {
-    const returned = req.query.returned === 'false';
-    if (returned) {
+    if (req.query.returned === 'false') { // if returned param is included and it equals false
       BorrowHistory.findAll({
         where: {
           userId: req.params.userId,
@@ -96,7 +93,7 @@ export default {
           userId: req.params.userId,
         }
       }).then(results => res.status(200).send({
-        message: 'list of user borrowd books',
+        message: 'list of user borrowed books',
         data: results
       }))
         .catch(error => res.status(500).send({ error: error.message }));
@@ -106,9 +103,8 @@ export default {
   // An API route that allow a user to borrow a book
   // POST​ : /api/users/:userId/books
   borrowBook(req, res, next) {
-    const userId = req.user;
+    const userId = req.user.userId;
     const bookId = req.body.bookId;
-    // if user making the request is not equal to the signed in user
     Book.findById(bookId).then((bookInstance) => {
       if (bookInstance.quantity === 0) {
         res.status(400).send({
@@ -145,8 +141,6 @@ export default {
       });
     });
   },
-  // An API route that allow user to return a book
-  // PUT : /api/users/<userId>/books
 
   borrowBookAllowed(req, res) {
     const bookId = req.body.bookId;
@@ -161,7 +155,7 @@ export default {
       }).then(() => {
         if (req.instanceAvailable) {
           BorrowHistory.update({ returnStatus: false }, {
-            where: { userId: req.user, bookId: req.body.bookId }
+            where: { userId: req.user.userId, bookId: req.body.bookId }
           }).then(() => {
             res.status(201).send({
               message: 'you have successfully borrowed this book again',
@@ -175,7 +169,7 @@ export default {
           });
         } else {
           BorrowHistory.create({
-            userId: req.user,
+            userId: req.user.userId,
             bookId: req.body.bookId
           }).then(() => {
             res.status(201).send({
@@ -204,7 +198,7 @@ export default {
   },
 
   returnBook(req, res) {
-    const userId = req.user;
+    const userId = req.user.userId;
     const bookId = req.body.bookId;
 
     BorrowHistory.findOne({
@@ -213,37 +207,37 @@ export default {
         bookId
       }
     }).then((historyInstance) => {
-      if (historyInstance) {
-        if (historyInstance.returnStatus) {
-          res.status(400).send({
-            message: 'you had previously returned this book'
-          });
-        } else {
-          historyInstance.update({ returnStatus: true })
-            .then((updatedHistoryInstance) => {
-              Book.findById(bookId).then((bookInstance) => {
-                bookInstance
-                  .update({ quantity: bookInstance.quantity + 1 })
-                  .then(() => {
-                    res.status(201).send({
-                      message: 'book has been returned successfully',
-                      data: updatedHistoryInstance
-                    });
-                  }).catch(error => res.status(500).send({
-                    error: error.message
-                  }));
-              });
-            }).catch((error) => {
-              res.status(400).send({
-                message: error.message
-              });
-            });
-        }
-      } else {
+      if (!historyInstance) {
         res.status(400).send({
           message: 'there is no instance of this borrowed book relationship'
         });
+        return;
       }
+      if (historyInstance.returnStatus) {
+        res.status(400).send({
+          message: 'you had previously returned this book'
+        });
+        return;
+      }
+      historyInstance.update({ returnStatus: true })
+        .then((updatedHistoryInstance) => {
+          Book.findById(bookId).then((bookInstance) => {
+            bookInstance
+              .update({ quantity: bookInstance.quantity + 1 })
+              .then(() => {
+                res.status(201).send({
+                  message: 'book has been returned successfully',
+                  data: updatedHistoryInstance
+                });
+              }).catch(error => res.status(500).send({
+                error: error.message
+              }));
+          });
+        }).catch((error) => {
+          res.status(400).send({
+            message: error.message
+          });
+        });
     }).catch((error) => {
       res.status(500).send({
         message: error.message
@@ -259,5 +253,4 @@ export default {
   getUser(req, res) {
     return User.findById(req.params.userId).then(user => res.send(user));
   }
-
 };
