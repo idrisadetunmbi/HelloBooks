@@ -49,7 +49,6 @@ export default {
     req.checkBody('quantity', 'quantity can only be a positive integer').notEmpty().isInt().isPositive();
     req.checkBody('description', 'description cannot be less than 5 characters').notEmpty().len(5, 1000);
     req.checkBody('category', 'category cannot be less than 3 characters').notEmpty().len(5, 20);
-    
     // TODO: Use sanitization
     req.getValidationResult().then((errors) => {
       if (!errors.isEmpty()) {
@@ -106,102 +105,71 @@ export default {
   },
 
   adminValidation: (req, res, next) => {
-    const userId = req.user;
-
-    User.findById(userId).then((user) => {
-      if (user) { // if a user with this id exists
-        if (!user.admin) {
-          res.status(403).send({
-            error: 'you are not allowed to perform this operation'
-          });
-        } else {
-          next();
-        }
-      } else {
-        res.status(400).send({ // should rarely happen
-          error: 'this user does not exist'
-        });
-      }
-    }).catch((error) => {
-      res.status(500).send({ // should rarely happen - if there was an error retrieving the userId from the database
-        message: 'could not retrieve this user',
-        error
+    if (!req.user.isAdmin) {
+      res.status(403).send({
+        error: 'you are not allowed to perform this operation'
       });
-    });
+      return;
+    }
+    next();
   },
 
   userBookActions: (req, res, next) => {
-    if (req.user !== req.params.userId) {
+    if (req.user.userId !== req.params.userId) {
       res.status(403).send({
         message: 'signed in user is not equal to requesting user',
         description: 'you cannot perform this function for another user'
       });
-    } else {
-      User.findById(req.user)
-        .then((user) => {
-          if (!user) {
-            res.status(400).send({
-              message: 'user does not exist'
-            });
-          } else if (user.admin) {
-            res.status(403).send({
-              message: 'admin user cannot perform this function'
-            });
-          } else {
-            Book.findById(req.body.bookId)
-              .then((book) => {
-                if (!book) {
-                  res.status(400).send({
-                    message: 'there is no book with the specified id'
-                  });
-                } else {
-                  next();
-                }
-              }).catch((error) => {
-                res.status(500).send({
-                  error: error.message
-                });
-              });
-          }
-        })
-        .catch((error) => {
-          res.status(500).send({
-            error: error.message
-          });
-        });
+      return;
     }
+
+    if (req.user.isAdmin) {
+      res.status(403).send({
+        message: 'admin user cannot perform this function'
+      });
+      return;
+    }
+
+    return Book.findById(req.body.bookId)
+      .then((book) => {
+        if (!book) {
+          res.status(400).send({
+            message: 'there is no book with the specified id'
+          });
+        } else {
+          next();
+        }
+      }).catch((error) => {
+        res.status(500).send({
+          error: error.message
+        });
+      });
   },
 
   getUserBorrowedBooks: (req, res, next) => {
-    User.findById(req.user).then((user) => {
-      if (user.admin) {
-        User.findById(req.params.userId)
-          .then((result) => {
-            if (!result) {
-              res.status(400).send({
-                message: 'user does not exist'
-              });
-            } else {
-              next();
-            }
-          })
-          .catch((error) => {
+    if (req.user.isAdmin) {
+      User.findById(req.params.userId)
+        .then((result) => {
+          if (!result) {
             res.status(400).send({
-              message: 'invalid user Id',
-              description: error.message
+              message: 'user does not exist'
             });
+            return;
+          }
+          next();
+        })
+        .catch((error) => {
+          res.status(400).send({
+            message: 'invalid user Id',
+            description: error.message
           });
-      } else if (user.id !== req.params.userId) {
-        res.status(400).send({
-          message: 'signed in user is not equal to requesting user'
         });
-      } else {
-        next();
-      }
-    }).catch((error) => {
+    } else if (req.user.userId !== req.params.userId) {
       res.status(400).send({
-        error: error.errors[0].message
+        message: 'signed in user is not equal to requesting user'
       });
-    });
+    } else {
+      next();
+    }
   }
 };
