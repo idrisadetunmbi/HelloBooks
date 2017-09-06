@@ -152,7 +152,7 @@ export default {
         .then((result) => {
           if (!result) {
             res.status(400).send({
-              message: 'user does not exist'
+              message: 'user with the specified param id does not exist'
             });
             return;
           }
